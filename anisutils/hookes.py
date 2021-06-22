@@ -98,7 +98,7 @@ def Hij_to_cijkl(H):
     else:
 
         if not type(H) == np.ndarray:
-            H = np.ndarray(H)
+            H = np.array(H)
 
         if H.shape[0] != 6 or H.shape[1] != 6:
             raise ValueError('H must be a 6x6 iterable and castable to np.ndarray')

@@ -15,7 +15,7 @@
 
 import numpy as np
 
-from .tensors import rotate_tensor
+from .tensors import rotate_tensor4
 from .hookes import Hij_to_cijkl
 
 
@@ -39,15 +39,15 @@ def get_n(gamma):
     return np.array([np.sin(gamma), 0, np.cos(gamma)]).T
 
 
-def get_christoffel(H, n):
+def get_christoffel(c, n):
     """Computes Christoffel tensor associated with the
-    Hooke's matrix H and propagation direction n.
+    rigidity tensor c and propagation direction n.
 
     Parameters
     ----------
 
-    H: 6x6 np.ndarray
-        Hooke's matrix
+    c: 3x3x3x3 np.ndarray
+        Rigidity tensor
     n: 1x3 np.ndarray
         Propagation direction vector
 
@@ -58,7 +58,6 @@ def get_christoffel(H, n):
         Christoffel tensor
     """
 
-    c = Hij_to_cijkl(H)
     Gamma = np.einsum('ijkl,j,k', c, n, n)
     return Gamma
 
@@ -96,13 +95,14 @@ def get_waves(H, rho, alpha_v, gamma_v):
     polarizations = {_: np.empty((len(alpha_v), len(gamma_v), 3)) for _ in modes}
 
     for i_alpha, alpha in enumerate(alpha_v):
-        comp_H = rotate_tensor(H, R=None, angles=(0,0,alpha))
+        c = Hij_to_cijkl(H)
+        comp_c = rotate_tensor4(c, R=None, angles=(0,0,alpha))
 
         for i_gamma, gamma in enumerate(gamma_v):
             n = get_n(gamma)
 
             # compute the speeds & polarizations
-            Gamma_christ = get_christoffel(comp_H, n)
+            Gamma_christ = get_christoffel(comp_c, n)
             D, V = np.linalg.eig(Gamma_christ)
 
             if i_gamma == 0 and i_alpha == 0:

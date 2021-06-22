@@ -75,7 +75,7 @@ def rotate_tensor4(c, R=None, angles=None):
     """
 
     if R is None:
-        R = get_rotation_matrix(angles)
+        R = get_rotation_matrix(*angles)
 
     RR = np.outer(R, R)
     RRRR = np.outer(RR, RR).reshape(4 * R.shape)
