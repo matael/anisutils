@@ -28,7 +28,7 @@ with open('README.rst', 'r') as fh:
     long_description = fh.read()
 
 setup(name='anisutils',
-      version='0.1.4',
+      version='0.2.0',
       description='Utilities to work with waves in anisotropic media',
       long_description=long_description,
       url='https://github.com/matael/anisutils',
