@@ -131,4 +131,17 @@ def get_waves(H, rho, alpha_v, gamma_v):
             polarizations['S1'][i_alpha,i_gamma] = V[:,id_S1]
             polarizations['S2'][i_alpha,i_gamma] = V[:,id_S2]
 
+            if i_alpha != 0:
+                s1 = 1/celerities['S1'][i_alpha,i_gamma]
+                s1_prev = 1/celerities['S1'][i_alpha-1,i_gamma]
+                s2_prev = 1/celerities['S2'][i_alpha-1,i_gamma]
+
+                if np.abs(s1 - s2_prev) < np.abs(s1 - s1_prev):
+                    c1 = celerities['S1'][i_alpha,i_gamma]
+                    p1 = polarizations['S1'][i_alpha,i_gamma]
+                    celerities['S1'][i_alpha,i_gamma] =  celerities['S2'][i_alpha,i_gamma]
+                    celerities['S2'][i_alpha,i_gamma] = c1
+                    polarizations['S1'][i_alpha,i_gamma] =  polarizations['S2'][i_alpha,i_gamma]
+                    polarizations['S2'][i_alpha,i_gamma] = p1
+
     return celerities, polarizations
