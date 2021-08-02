@@ -62,7 +62,7 @@ def get_christoffel(c, n):
     return Gamma
 
 
-def get_waves(H, rho, alpha_v, gamma_v):
+def get_waves(H, rho, alpha_v, gamma_v, tolerance=.05):
     """Compute the waves celerities and polarizations for the given material.
 
     Parameters
@@ -136,7 +136,11 @@ def get_waves(H, rho, alpha_v, gamma_v):
                 s1_prev = 1/celerities['S1'][i_alpha-1,i_gamma]
                 s2_prev = 1/celerities['S2'][i_alpha-1,i_gamma]
 
-                if np.abs(s1 - s2_prev) < np.abs(s1 - s1_prev):
+                s1ms2prev = np.abs(s1 - s2_prev)
+                s1ms1prev = np.abs(s1 - s1_prev)
+
+                # if  s1ms2prev < s1ms1prev:
+                if  s1ms2prev - s1ms1prev < tolerance*(s1ms1prev):
                     c1 = celerities['S1'][i_alpha,i_gamma]
                     p1 = polarizations['S1'][i_alpha,i_gamma]
                     celerities['S1'][i_alpha,i_gamma] =  celerities['S2'][i_alpha,i_gamma]
