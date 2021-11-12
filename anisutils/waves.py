@@ -103,7 +103,7 @@ def get_waves(H, rho, alpha_v, gamma_v, tolerance=.05):
 
             # compute the speeds & polarizations
             Gamma_christ = get_christoffel(comp_c, n)
-            D, V = np.linalg.eig(Gamma_christ)
+            D, V = np.linalg.eigh(Gamma_christ)
 
             if i_gamma == 0 and i_alpha == 0:
                 prev_L = n.T
